@@ -25,13 +25,12 @@ $request_json = '{
  "subject": "example subject", 
  "from_email": "mohamedaymen.mastouri@esprit.tn", 
  "from_name": "example from_name",
- "to":[{"email": "mohamedaymen.mastouri@esprit.tn", "name": "Wes Widner"}],
+ "to":[{"email": "mohamedaymen.mastouri@gmail.com", "name": "Wes Widner"}],
  "headers":{"...": "..."},
 "track_opens":false,
 "track_clicks":false
 }}';
 $ret = Mandrill::call((array) json_decode($request_json));
-print_r($ret);
 //$ret1 =Mandrill::call(array('type'=>'users', 'call'=>'ping'));
 
     }

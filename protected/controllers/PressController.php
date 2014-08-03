@@ -29,7 +29,7 @@ class PressController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('released', 'scheduled', 'delete', 'admin', 'drafts', 'create', 'update', 'deletepress','deletepress1'),
+                'actions' => array('released', 'scheduled', 'delete', 'admin', 'drafts', 'create', 'update', 'deletepress', 'deletepress1'),
                 'users' => array('@'),
             ),
 //            array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -76,12 +76,12 @@ class PressController extends Controller {
         if (isset($_POST['Press'])) {
             $model->attributes = $_POST['Press'];
             $status = $_POST['Press']['press_status'];
-           // print_r($status);
+            // print_r($status);
 
             $model->press_date = date('Y-m-d H:i:s');
-            if ($status == "N"&&$model->press_date_started==NULL ) {
+            if ($status == "N" && $model->press_date_started == NULL) {
                 $model->press_date_started = date('Y-m-d H:i:s');
-                $model->press_status="Q";
+                $model->press_status = "Q";
             } else {
                 $model->press_date_started = $_POST['Press']['press_date_started'] . ' ' . $_POST['Press']['hours'] . ':00';
             }
@@ -92,10 +92,11 @@ class PressController extends Controller {
             //  $model->press_date_started = $_POST['Press']['press_date_started'].' '. $_POST['Press']['hours'].':00';       
 
             if ($model->save()) {
+
                 //test mail 
                 $email = Yii::app()->mandrillwrap;
-                $email->sendEmail();$email = Yii::app()->mandrillwrap;
-                                $email->sendEmail();
+                $email->sendEmail();
+
                 if ($model->press_file_1 != null)
                     $model->press_file_1->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_1);
                 if ($model->press_file_2 != null)
@@ -103,15 +104,14 @@ class PressController extends Controller {
                 if ($model->press_file_3 != null)
                     $model->press_file_3->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_3);
 
-                 if ($status == "N" || $status == "Q")
-                     $this->redirect(array('/press/scheduled'));
-                 else 
-                     $this->redirect(array('/press/drafts'));
-                
-                
+                if ($status == "N" || $status == "Q")
+                    $this->redirect(array('/press/scheduled'));
+                else
+                    $this->redirect(array('/press/drafts'));
 
-               // $this->redirect(array('view', 'id' => $model->press_id));
 
+
+                // $this->redirect(array('view', 'id' => $model->press_id));
             }
         }
 
@@ -190,7 +190,8 @@ class PressController extends Controller {
         $this->loadModel($id)->delete();
         $this->redirect(Yii::app()->request->baseUrl . '/index.php/press/drafts');
     }
-      public function actionDeletepress1($id) {
+
+    public function actionDeletepress1($id) {
 
         $this->loadModel($id)->delete();
         $this->redirect(Yii::app()->request->baseUrl . '/index.php/press/scheduled');
