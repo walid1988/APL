@@ -102,16 +102,16 @@ class PressController extends Controller {
                     $model->press_file_2->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_2);
                 if ($model->press_file_3 != null)
                     $model->press_file_3->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_3);
-<<<<<<< HEAD
+
                  if ($status == "N" || $status == "Q")
                      $this->redirect(array('/press/scheduled'));
                  else 
                      $this->redirect(array('/press/drafts'));
                 
                 
-=======
+
                // $this->redirect(array('view', 'id' => $model->press_id));
->>>>>>> f8e3c53822b422f0cd40e8b9c979b79490572f29
+
             }
         }
 
