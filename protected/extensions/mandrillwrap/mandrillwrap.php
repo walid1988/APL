@@ -20,13 +20,17 @@ class mandrillwrap extends CApplicationComponent {
 $request_json = '{
 "type":"messages",
 "call":"send",
-"message":{"html": "<h1>example html</h1>",
- "text": "example text", 
- "subject": "example subject", 
- "from_email": "mohamedaymen.mastouri@esprit.tn", 
- "from_name": "example from_name",
- "to":[{"email": "mohamedaymen.mastouri@gmail.com", "name": "Wes Widner"}],
- "headers":{"...": "..."},
+"message":{
+"html": "' . $this->html . '",
+ "text": "' . $this->text . '", 
+ "subject":"' . $this->subject . '",
+ "from_email": "' . $this->fromEmail . '", 
+ "from_name": "' . $this->fromName . '",,
+ "to":[{
+ "email": "' . $this->toEmail . '",
+ "name": "' . $this->toName . '"
+ }],
+  "headers":{"Reply-To": "' . $this->replyEmail . '"},
 "track_opens":false,
 "track_clicks":false
 }}';

@@ -79,13 +79,21 @@ class PressController extends Controller {
             // print_r($status);
 
             $model->press_date = date('Y-m-d H:i:s');
-            if ($status == "N" && $model->press_date_started == NULL) {
-                $model->press_date_started = date('Y-m-d H:i:s');
+                    
+          if ($status == 'N'){
+            
+                $model->press_date_started =date('Y-m-d H:i:s');
+                $model->press_status = "Q";
+      } 
+            else if ($status == 'Q') {
+                $model->press_date_started = $_POST['Press']['press_date_started'] . ' ' . $_POST['Press']['hours'] . ':00';
                 $model->press_status = "Q";
             } else {
-                $model->press_date_started = $_POST['Press']['press_date_started'] . ' ' . $_POST['Press']['hours'] . ':00';
+                    $model->press_status = "D";
+             
+                $model->press_date_started = null;
+              
             }
-
             $model->press_file_1 = CUploadedFile::getInstance($model, 'press_file_1');
             $model->press_file_2 = CUploadedFile::getInstance($model, 'press_file_2');
             $model->press_file_3 = CUploadedFile::getInstance($model, 'press_file_3');
@@ -94,8 +102,8 @@ class PressController extends Controller {
             if ($model->save()) {
 
                 //test mail 
-                $email = Yii::app()->mandrillwrap;
-                $email->sendEmail();
+//                $email = Yii::app()->mandrillwrap;
+//                $email->sendEmail();
 
                 if ($model->press_file_1 != null)
                     $model->press_file_1->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_1);
@@ -107,6 +115,7 @@ class PressController extends Controller {
                 if ($status == "N" || $status == "Q")
                     $this->redirect(array('/press/scheduled'));
                 else
+                    
                     $this->redirect(array('/press/drafts'));
 
 
@@ -119,6 +128,101 @@ class PressController extends Controller {
             'model' => $model,
         ));
     }
+    
+    public function actionUpdate($id) {
+          //$id = Yii::app()->user->id;
+        $model = $this->loadModel($id);
+        $file1=null;
+        $file2=null;
+        $file3=null;
+        $file1= $model->press_file_1;
+        $file2= $model->press_file_2;
+        $file3= $model->press_file_3;
+        $this->performAjaxValidation($model);
+        if (isset($_POST['Press'])) {
+
+            $model->attributes = $_POST['Press'];
+                $model->press_date = date('Y-m-d H:i:s');
+              $status = $_POST['Press']['press_status'];
+              
+          if ($status == 'N'){
+            
+                $model->press_date_started =date('Y-m-d H:i:s');
+                $model->press_status = "Q";
+      } 
+            else if ($status == 'Q') {
+                $model->press_date_started = $_POST['Press']['press_date_started'] . ' ' . $_POST['Press']['hours'] . ':00';
+                $model->press_status = "Q";
+            } else {
+                    $model->press_status = "D";
+             
+                $model->press_date_started = null;
+              
+            }
+            
+   
+            $model->press_file_1 = CUploadedFile::getInstance($model, 'press_file_1');
+            $model->press_file_2 = CUploadedFile::getInstance($model, 'press_file_2');
+            $model->press_file_3 = CUploadedFile::getInstance($model, 'press_file_3');
+        
+         if( $model->press_file_1==null){
+             if (!empty($file1)){
+                 
+                    
+                    $model->press_file_1= $file1;
+                   
+                 }
+         }
+         
+         else 
+           if( $model->press_file_2==null){
+             if (!empty($file2)){
+                 
+                    
+                    $model->press_file_2= $file2;
+                   
+                 }
+         }
+           if( $model->press_file_3==null){
+             if (!empty($file3)){
+                 
+                    
+                    $model->press_file_3= $file3;
+                   
+                 }
+         }
+            
+           
+            if ($model->save()) {
+                
+                if ($model->press_file_1 != null){
+                    $img1=Yii::app()->basePath . '/../uploads/' . $model->press_file_1;
+                   if(!file_exists($img1)){
+                $model->press_file_1->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_1);}}
+                
+                
+                if ($model->press_file_2 != null){
+                     $img2=Yii::app()->basePath . '/../uploads/' . $model->press_file_2;
+                     if(!file_exists($img2)){
+                $model->press_file_2->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_2);}}
+                
+                if ($model->press_file_3 != null){
+                  $img3=Yii::app()->basePath . '/../uploads/' . $model->press_file_3;
+                     if(!file_exists($img3)){
+                $model->press_file_3->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_3);}}
+                
+                if ($status == "N" || $status == "Q")
+                    $this->redirect(array('/press/scheduled'));
+                else
+                    $this->redirect(array('/press/drafts'));
+                
+            }
+        }
+
+        $this->render('update', array(
+            'model' => $model
+        ));
+    }
 
     public function actionDrafts() {
         $press_user = Yii::app()->user->id;
@@ -129,6 +233,8 @@ class PressController extends Controller {
         $this->render('drafts', array(
             'presses' => $presses,
         ));
+        
+        
     }
 
     public function actionReleased() {
@@ -147,33 +253,7 @@ class PressController extends Controller {
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id the ID of the model to be updated
      */
-    public function actionUpdate($id) {
-
-        $model = $this->loadModel($id);
-        $this->performAjaxValidation($model);
-        if (isset($_POST['Press'])) {
-
-            $model->attributes = $_POST['Press'];
-            $model->press_file_1 = CUploadedFile::getInstance($model, 'press_file_1');
-            $model->press_file_2 = CUploadedFile::getInstance($model, 'press_file_2');
-            $model->press_file_3 = CUploadedFile::getInstance($model, 'press_file_3');
-
-            $model->press_date_started = $_POST['Press']['press_date_started'] . ' ' . $_POST['Press']['hours'] . ':00';
-            if ($model->save()) {
-                if ($model->press_file_1 != null)
-                    $model->press_file_1->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_1);
-                if ($model->press_file_2 != null)
-                    $model->press_file_2->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_2);
-                if ($model->press_file_3 != null)
-                    $model->press_file_3->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_3);
-                $this->redirect(array('view', 'id' => $model->press_id));
-            }
-        }
-
-        $this->render('update', array(
-            'model' => $model
-        ));
-    }
+    
 
     /**
      * Deletes a particular model.
