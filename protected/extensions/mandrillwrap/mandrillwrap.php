@@ -45,14 +45,8 @@ class mandrillwrap extends CApplicationComponent {
 							"tags":["fal"],
 							"google_analytics_domains":["..."],
 							"google_analytics_campaign":["..."],
-							"metadata":["..."],
-                                                         "images": [
-                                                                      {
-                                                           "type": "image/png",
-                                                           "name": "IMAGECID",
-                                                           "content": "ZXhhbXBsZSBmaWxl"
-                                                                             }
-                                                                    ],
+							"metadata":["..."]
+                
 							}
 						}';
 

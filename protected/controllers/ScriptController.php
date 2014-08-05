@@ -22,13 +22,16 @@ class ScriptController extends Controller {
                 foreach ($contacts as $contact) {
                     $email = Yii::app()->mandrillwrap;
                     $content = $press->press_content;
-                    $content= htmlentities($content);
+                //    $content= htmlentities($content);
                     echo $content;
-                    echo '******';
+                      echo '*********';
                     //                  $content = str_replace('"', '', $htmontent);
-                  $content = substr($content,0,30);
-                  echo $content;
-                  $email->html = $content;//"Hallo, okkkkkkkkkkkkkkkkk ";
+                 // $content = substr($content,0,30);
+                // $content='<html><div > aaaa <img src="some_ad.png"/> <h3>&quot;Hot&quot; </h3>Items</div></html>';
+                 $content= str_replace("\r\n", '', $content);
+                 echo $content;
+                 //$email->html ="<div class=\"ad_box\"><img class=\"banner\" src=\"some_ad.png\"\/><h3>&quot;Hot&quot; Items<ul \/><\/div>";
+                  $email->html = $content;//"<html><div > aaaa <img src='some_ad.png'/> <h3>&quot;Hot&quot; </h3>Items</div></html>";
                     $email->subject = $press->press_subject;
                     $email->fromName = $press->press_sender_name;
                     $email->fromEmail = $press->press_sender_email;
