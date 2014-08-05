@@ -28,13 +28,13 @@ class ScriptController extends Controller
          foreach ($contacts as $contact){
             
              $email = Yii::app()->mandrillwrap; 
-             $email->html = htmlentities($press->press_content);
-             $email->subject = $press->press_subject;
-             $email->fromName = $press->press_sender_name;
-             $email->fromEmail = $press->press_sender_email;
-             $email->replyEmail=$press->press_replyto_email;
-             $email->toName = $contact->contact_name_last .' '.$contact->contact_name_first;
-             $email->toEmail = $contact->contact_email;
+             //$email->html = $press->press_content;
+//             $email->subject = $press->press_subject;
+//             $email->fromName = $press->press_sender_name;
+//             $email->fromEmail = $press->press_sender_email;
+//             $email->replyEmail=$press->press_replyto_email;
+//             $email->toName = $contact->contact_name_last .' '.$contact->contact_name_first;
+//             $email->toEmail = $contact->contact_email;
     
          $result=$email->sendEmail();
          }

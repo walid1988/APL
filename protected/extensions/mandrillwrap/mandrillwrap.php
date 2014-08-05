@@ -13,24 +13,20 @@ class mandrillwrap extends CApplicationComponent {
 	public function init()
 	{
 		Yii::import('application.vendors.Mandrill');
-		define('MANDRILL_API_KEY','-47REdJ11GUIcpHCv60c0w');
+		define('MANDRILL_API_KEY','vx4a-QQzpKypkAqF2U9cfA');
         }
 		public function sendEmail() {		
 		
 $request_json = '{
 "type":"messages",
 "call":"send",
-"message":{
-"html": "' . $this->html . '",
- "text": "' . $this->text . '", 
- "subject":"' . $this->subject . '",
- "from_email": "' . $this->fromEmail . '", 
- "from_name": "' . $this->fromName . '",,
- "to":[{
- "email": "' . $this->toEmail . '",
- "name": "' . $this->toName . '"
- }],
-  "headers":{"Reply-To": "' . $this->replyEmail . '"},
+"message":{"html": "<h1>example html</h1>",
+ "text": "example text", 
+ "subject": "example subject", 
+ "from_email": "mohamedaymen.mastouri@esprit.tn", 
+ "from_name": "example from_name",
+ "to":[{"email": "mohamedaymen.mastouri@gmail.com", "name": "Wes Widner"}],
+ "headers":{"...": "..."},
 "track_opens":false,
 "track_clicks":false
 }}';
