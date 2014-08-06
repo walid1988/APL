@@ -70,11 +70,18 @@ class PressController extends Controller {
     public function actionCreate() {
         $model = new Press;
         $model->press_user = Yii::app()->user->id;
+    
+       $client = Client::model()->findByPk(Yii::app()->user->id);
+       $model->press_sender_email=$client->user_email;
+       $model->press_replyto_email=$client->user_email;
+       $model->press_sender_name = $client->porfile_name_last;
+        $model->press_replyto_name = $client->porfile_name_last;
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
 
         if (isset($_POST['Press'])) {
             $model->attributes = $_POST['Press'];
+             $model->press_content= str_replace("\r\n", '', $model->press_content);
             $status = $_POST['Press']['press_status'];
             // print_r($status);
 
@@ -106,11 +113,11 @@ class PressController extends Controller {
 //                $email->sendEmail();
 
                 if ($model->press_file_1 != null)
-                    $model->press_file_1->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_1);
+                    $model->press_file_1->saveAs(Yii::app()->basePath . '/uploads/' . $model->press_file_1);
                 if ($model->press_file_2 != null)
-                    $model->press_file_2->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_2);
+                    $model->press_file_2->saveAs(Yii::app()->basePath . '/uploads/' . $model->press_file_2);
                 if ($model->press_file_3 != null)
-                    $model->press_file_3->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_3);
+                    $model->press_file_3->saveAs(Yii::app()->basePath . '/uploads/' . $model->press_file_3);
 
                 if ($status == "N" || $status == "Q")
                     $this->redirect(array('/press/scheduled'));
@@ -142,7 +149,8 @@ class PressController extends Controller {
         if (isset($_POST['Press'])) {
 
             $model->attributes = $_POST['Press'];
-                $model->press_date = date('Y-m-d H:i:s');
+             $model->press_content= str_replace("\r\n", '', $model->press_content);
+                //$model->press_date = date('Y-m-d H:i:s');
               $status = $_POST['Press']['press_status'];
               
           if ($status == 'N'){
@@ -196,20 +204,20 @@ class PressController extends Controller {
             if ($model->save()) {
                 
                 if ($model->press_file_1 != null){
-                    $img1=Yii::app()->basePath . '/../uploads/' . $model->press_file_1;
+                    $img1=Yii::app()->basePath . '/uploads/' . $model->press_file_1;
                    if(!file_exists($img1)){
-                $model->press_file_1->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_1);}}
+                $model->press_file_1->saveAs(Yii::app()->basePath . '/uploads/' . $model->press_file_1);}}
                 
                 
                 if ($model->press_file_2 != null){
-                     $img2=Yii::app()->basePath . '/../uploads/' . $model->press_file_2;
+                     $img2=Yii::app()->basePath . '/uploads/' . $model->press_file_2;
                      if(!file_exists($img2)){
-                $model->press_file_2->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_2);}}
+                $model->press_file_2->saveAs(Yii::app()->basePath . '/uploads/' . $model->press_file_2);}}
                 
                 if ($model->press_file_3 != null){
-                  $img3=Yii::app()->basePath . '/../uploads/' . $model->press_file_3;
+                  $img3=Yii::app()->basePath . '/uploads/' . $model->press_file_3;
                      if(!file_exists($img3)){
-                $model->press_file_3->saveAs(Yii::app()->basePath . '/../uploads/' . $model->press_file_3);}}
+                $model->press_file_3->saveAs(Yii::app()->basePath . '/uploads/' . $model->press_file_3);}}
                 
                 if ($status == "N" || $status == "Q")
                     $this->redirect(array('/press/scheduled'));
