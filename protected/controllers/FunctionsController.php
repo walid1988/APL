@@ -1,6 +1,6 @@
 <?php
 
-class CompanyController extends Controller
+class FunctionsController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -28,7 +28,7 @@ class CompanyController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','listcountry'),
+				'actions'=>array('index','view'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -55,21 +55,6 @@ class CompanyController extends Controller
 			'model'=>$this->loadModel($id),
 		));
 	}
-        
-        public function actionListcountry($id)
-	{
-		$country = IsoCountry::model()->findAll();
-                $company = Company::model()->findByPk($id);
-                echo '<b>'.$company->comp_name.'</b><br>';
-                echo '<select name="country'.$id.'[]" multiple>';
-                foreach($country as $value){
-                
-                    echo '<option value="'.$value->country_iso.'">'.$value->country_name.'</option>';
-                    
-                }
-                echo '</select>';
-           
-	}
 
 	/**
 	 * Creates a new model.
@@ -77,31 +62,23 @@ class CompanyController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Company;
+		$model=new Functions;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Company']))
+		if(isset($_POST['Functions']))
 		{
-			$model->attributes=$_POST['Company'];
+			$model->attributes=$_POST['Functions'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->comp_id));
+				$this->redirect(array('view','id'=>$model->function_id));
 		}
 
 		$this->render('create',array(
 			'model'=>$model,
 		));
 	}
-        public function actionCompanydelete(){
-            
-            $company = Company::model()->findAll();
-            $companyelemine = $_POST['id_company'];
-            
-            if(($key = array_search($del_val, $messages)) !== false) {
-                 unset($messages[$key]);
-            }
-        }
+
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
@@ -114,11 +91,11 @@ class CompanyController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Company']))
+		if(isset($_POST['Functions']))
 		{
-			$model->attributes=$_POST['Company'];
+			$model->attributes=$_POST['Functions'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->comp_id));
+				$this->redirect(array('view','id'=>$model->function_id));
 		}
 
 		$this->render('update',array(
@@ -145,7 +122,7 @@ class CompanyController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Company');
+		$dataProvider=new CActiveDataProvider('Functions');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -156,10 +133,10 @@ class CompanyController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Company('search');
+		$model=new Functions('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Company']))
-			$model->attributes=$_GET['Company'];
+		if(isset($_GET['Functions']))
+			$model->attributes=$_GET['Functions'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -170,12 +147,12 @@ class CompanyController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Company the loaded model
+	 * @return Functions the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Company::model()->findByPk($id);
+		$model=Functions::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -183,11 +160,11 @@ class CompanyController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Company $model the model to be validated
+	 * @param Functions $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='company-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='functions-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
