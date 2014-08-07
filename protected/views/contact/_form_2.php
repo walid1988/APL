@@ -4,115 +4,112 @@
 <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/token-input.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/token-input-facebook.css" type="text/css" />
 <script>
+    
+	$(document).ready(function(){
+		//when the Add Filed button is clicked
+                var i=0;
+                
+                /***Company Initial**/
+                $("#inputcompany"+i).tokenInput([			
+			<?php			
+			$company = Company::model()->findAll();
+                         
+                        foreach($company as $value){  
+                            echo '{id:'.$value->comp_id.', name:"'.$value->comp_name.'"},';
+                        }
+			?>
+            ], { theme: "facebook", preventDuplicates: true,tokenLimit:1 	
+			});
+                
+                /***Country Initial**/
+                $("#inputcountry").tokenInput([			
+			<?php			
+			$country = IsoCountry::model()->findAll();
+                         
+                        foreach($country as $value){  
+                            echo '{id:'.$value->country_iso.', name:"'.$value->country_name.'"},';
+                        }
+			?>
+            ], { theme: "facebook", preventDuplicates: true,	
+			}); 
+                        
+                        
+                 /***Function Initial**/
+                $("#inputfunction").tokenInput([			
+			<?php			
+			$function = Functions::model()->findAll();
+                         
+                        foreach($function as $value){  
+                            echo '{id:'.$value->function_id.', name:"'.$value->function_title.'"},';
+                        }
+			?>
+            ], { theme: "facebook", preventDuplicates: true, 	
+			});        
+                        
+                        
+                
+		$("#add").click(function (e) {
+			//Append a new row of code to the "#items" div
+			$("#items").append('<div><table><tr><td><b>Company</b><input type="text" name="company[]" id="inputcompany'+i+'"></td><td><b>Country</b><input type="text" name="country[]" id="inputcountry'+i+'"></td><td><b>Fielf of interest</b><input type="text" name="function[]" id="inputfunction'+i+'"></td><td><button class="delete" type="button">Delete</button></td></tr></table></div>');
+                        for(j=0;j<i-1;++){
+                            idcompany[j]  = document.getElementById('inputcompany'+j).value;
+                        }
+                        <?php
+                        foreach($company as $value){
+                            $idcompany[][0] = $value->comp_id;
+                            $idcompany[][1] = $value->comp_name;
+                        }
+                        
+                        ?>
+                                    
+                        allcompany = <?php echo json_encode($idcompany); ?>;
+                        for(k=0;k<idcompany.length;k++){
+                            for(c=0;c<allcompany.length;c++){    
+                                if(idcompany[k]==allcompany[c][0]){
+                                    allcompany.splice(c, 1);
+                                }
+                            }
+                        }
+                        chaine='';
+                        for(c=0;c<allcompany.length;c++){
+                                chaine+='{id:'+allcompany[c][0]+', name:"'+allcompany[c][1]+'"},';
+                            }
+                        $("#inputcompany"+i).tokenInput([
+                            chaine
+			<?php
+                        foreach($company as $value){  
+                            echo '{id:'.$value->comp_id.', name:"'.$value->comp_name.'"},';                             
+                        }
+			?>
+            ], { theme: "facebook", preventDuplicates: true,tokenLimit:1	
+			});
+                        
+                        $("#inputcountry"+i).tokenInput([			
+			<?php			
+                        foreach($country as $value){  
+                            echo '{id:'.$value->country_iso.', name:"'.$value->country_name.'"},';
+                        }
+			?>
+            ], { theme: "facebook", preventDuplicates: true,	
+			});
+                        
+                        $("#inputfunction"+i).tokenInput([			
+			<?php			                       
+                        foreach($function as $value){  
+                            echo '{id:'.$value->function_id.', name:"'.$value->function_title.'"},';
+                        }
+			?>
+            ], { theme: "facebook", preventDuplicates: true, 	
+			});
+                 i++;       
+                });
+                
+                
 
-    $(document).ready(function() {
-        //when the Add Filed button is clicked
-        var i = 0;
-
-        /***Company Initial**/
-        $("#inputcompany" + i).tokenInput([
-<?php
-$company = Company::model()->findAll();
-
-foreach ($company as $value) {
-    echo '{id:' . $value->comp_id . ', name:"' . $value->comp_name . '"},';
-}
-?>
-        ], {theme: "facebook", preventDuplicates: true, tokenLimit: 1
-        });
-
-        /***Country Initial**/
-        $("#inputcountry" + i).tokenInput([
-<?php
-$country = IsoCountry::model()->findAll();
-
-foreach ($country as $value) {
-    echo '{id:' . $value->country_iso . ', name:"' . $value->country_name . '"},';
-}
-?>
-        ], {theme: "facebook", preventDuplicates: true,
-        });
-
-
-        /***Function Initial**/
-        $("#inputfunction" + i).tokenInput([
-<?php
-$function = Functions::model()->findAll();
-
-foreach ($function as $value) {
-    echo '{id:' . $value->function_id . ', name:"' . $value->function_title . '"},';
-}
-?>
-        ], {theme: "facebook", preventDuplicates: true,
-        });
-
-
-
-        $("#add").click(function(e) {
-        i++;    
-        
-            //Append a new row of code to the "#items" div
-            $("#items").append('<div><table><tr><td><b>Company</b><input type="text" name="company[]" id="inputcompany' + i + '"></td><td><b>Country</b><input type="text" name="country[]" id="inputcountry' + i + '"></td><td><b>Fielf of interest</b><input type="text" name="function[]" id="inputfunction' + i + '"></td><td><button class="delete" type="button">Delete</button></td></tr></table></div>');
-    n = i-1; 
-    var idcompany = new Array();
-    for (j = 0; j <= n; j++) {
-                idcompany[j] = document.getElementById('inputcompany' + j).value;
-            }
-<?php
-$c =0;
-foreach ($company as $value) {
-    $idcompany[$c]['id'] = $value->comp_id;
-    $idcompany[$c]['name'] = $value->comp_name;
-    $c++;
-}
-?>
-
-            var allcompany = <?php  echo json_encode($idcompany); ?>;
-                   
-    for (k = 0; k < idcompany.length; k++) {
-                for (c = 0; c < allcompany.length; c++) {
-                    if (idcompany[k] == allcompany[c].id) {
-                        allcompany.splice(c, 1);
-                    }
-                }
-            }
-            var chaine = '';
-            for (c = 0; c < allcompany.length; c++) {
-                //chaine = chaine + '{"id":"1","name":"' + allcompany[c].name + '"},';
-                chaine = chaine + {"name":"la presse"};
-            }
-            //alert(chaine);
-            
-            //var obj = JSON.parse(chaine);
-            $("#inputcompany" + i).tokenInput([chaine], {theme: "facebook", preventDuplicates: true, tokenLimit: 1
-            });
-
-            $("#inputcountry" + i).tokenInput([
-<?php
-foreach ($country as $value) {
-    echo '{id:' . $value->country_iso . ', name:"' . $value->country_name . '"},';
-}
-?>
-            ], {theme: "facebook", preventDuplicates: true,
-            });
-
-            $("#inputfunction" + i).tokenInput([
-<?php
-foreach ($function as $value) {
-    echo '{id:' . $value->function_id . ', name:"' . $value->function_title . '"},';
-}
-?>
-            ], {theme: "facebook", preventDuplicates: true,
-            });
-            
-        });
-
-
-
-        $("body").on("click", ".delete", function(e) {
-            $(this).closest("div").remove();
-        });
-    });
+	$("body").on("click", ".delete", function (e) {
+		$(this).closest("div").remove();
+	});
+	});
 </script>
 <?php
 /* @var $this ContactController */
@@ -195,7 +192,7 @@ $form = $this->beginWidget('booster.widgets.TbActiveForm', array(
                     <fieldset>
 
                         <!--                    <div class="row">
-                        <?php // echo $form->labelEx($model,'contact_email');   ?>
+                        <?php // echo $form->labelEx($model,'contact_email');  ?>
                         <?php // echo $form->labelEx($model,'contact_email'); ?>
                         <?php
 //                        echo $form->textFieldGroup($model, 'contact_email', array('size' => 60, 'maxlength' => 255,
@@ -203,38 +200,38 @@ $form = $this->beginWidget('booster.widgets.TbActiveForm', array(
 //                        ));
 //                        
                         ?>
-                        <?php // echo $form->error($model, 'contact_email');  ?> <span class="label label-info"    
+<?php // echo $form->error($model, 'contact_email');  ?> <span class="label label-info"    
                                                       >Minimum is 6 characters <br>Must contain at least one special character</span>
                                             </div>     -->
 
                         <div class="row"> 
-                            <?php //echo $form->labelEx($model,'contact_login_pass');   ?>
+                            <?php //echo $form->labelEx($model,'contact_login_pass');  ?>
                             <?php
 //                        echo $form->passwordFieldGroup($model, 'contact_login_pass', array('size' => 60, 'maxlength' => 255,
 //                            'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
 //                        ));
 //                        
                             ?>
-                            <?php // echo $form->error($model, 'contact_login_pass');  ?>
+<?php // echo $form->error($model, 'contact_login_pass');  ?>
 
                         </div>
 
                         <div class="row">
-                            <?php //echo $form->labelEx($model,'contact_login_pass');   ?>
+                            <?php //echo $form->labelEx($model,'contact_login_pass');  ?>
                             <?php
 //                        echo $form->passwordFieldGroup($model, 'verifyPassword', array('size' => 60, 'maxlength' => 255,
 //                            'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
 //                        ));
 //                        
                             ?>
-                            <?php // echo $form->error($model, 'verifyPassword');  ?>
+<?php // echo $form->error($model, 'verifyPassword');  ?>
                         </div>
 
 
 
 
                         <div class="row">
-                            <?php //echo $form->labelEx($model,'contact_name_ini');    ?>
+                            <?php //echo $form->labelEx($model,'contact_name_ini');   ?>
                             <?php
                             echo $form->textFieldGroup($model, 'contact_name_ini', array('size' => 60, 'maxlength' => 255,
                                 'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
@@ -244,7 +241,7 @@ $form = $this->beginWidget('booster.widgets.TbActiveForm', array(
                         </div>
 
                         <div class="row">
-                            <?php //echo $form->labelEx($model,'contact_name_first');   ?>
+                            <?php //echo $form->labelEx($model,'contact_name_first');  ?>
                             <?php
                             echo $form->textFieldGroup($model, 'contact_name_first', array('size' => 60, 'maxlength' => 255,
                                 'wrapperHtmlOptions' => array('class' => 'col-sm-6',)
@@ -254,7 +251,7 @@ $form = $this->beginWidget('booster.widgets.TbActiveForm', array(
                         </div>
 
                         <div class="row">
-                            <?php //echo $form->labelEx($model,'contact_name_last');   ?>
+                            <?php //echo $form->labelEx($model,'contact_name_last');  ?>
                             <?php
                             echo $form->textFieldGroup($model, 'contact_name_last', array('size' => 60, 'maxlength' => 255,
                                 'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
@@ -264,7 +261,7 @@ $form = $this->beginWidget('booster.widgets.TbActiveForm', array(
                         </div>
 
                         <div class="row">
-                            <?php //echo $form->labelEx($model,'contact_gender');   ?>
+                            <?php //echo $form->labelEx($model,'contact_gender');  ?>
                             <?php
                             echo $form->dropDownListGroup(
                                     $model, 'contact_gender', array(
@@ -278,24 +275,31 @@ $form = $this->beginWidget('booster.widgets.TbActiveForm', array(
                                     )
                             );
                             ?>
-                            <?php // echo $form->textField($model,'contact_gender',array('size'=>1,'maxlength'=>1));   ?>
-                            <?php echo $form->error($model, 'contact_gender'); ?>
+<?php // echo $form->textField($model,'contact_gender',array('size'=>1,'maxlength'=>1));   ?>
+<?php echo $form->error($model, 'contact_gender'); ?>
                         </div>
 
                         <div class="row">
 
 
                             <?php
-                            echo $form->dropDownListGroup(
-                                    $categories, 'cat_title', array(
-                                'wrapperHtmlOptions' => array(
-                                    'class' => 'col-sm-5',
+   
+                            
+                            
+                         echo $form->dropDownListGroup(
+			$categories,
+			'cat_title',
+			array(
+				'wrapperHtmlOptions' => array(
+					'class' => 'col-sm-5',
+				),
+	   			'widgetOptions' => array(
+	   				'data' => CHtml::listData(BusinessCategory::model()->findAll(), 'cat_id', 'cat_title'
                                 ),
-                                'widgetOptions' => array(
-                                    'data' => CHtml::listData(BusinessCategory::model()->findAll(), 'cat_id', 'cat_title'
-                                    ),
-                                    'htmlOptions' => array('multiple' => true),
-                            )));
+					'htmlOptions' => array('multiple' => true),
+				)));
+                            
+                
                             ?>
 
 
@@ -303,43 +307,50 @@ $form = $this->beginWidget('booster.widgets.TbActiveForm', array(
 
 
 
-                        <div class="row">
+<div class="row">
 
 
-<?php
-echo $form->dropDownListGroup(
-        $iso_language, 'lang_iso', array(
-    'wrapperHtmlOptions' => array(
-        'class' => 'col-sm-5',
-    ),
-    'widgetOptions' => array(
-        'data' => CHtml::listData(IsoLanguage::model()->findAll(), 'lang_iso', 'language'
-        ),
-        'htmlOptions' => array('multiple' => true),
-)));
-?>
+                            <?php
+   
+                            
+                            
+                         echo $form->dropDownListGroup(
+			$iso_language,
+			'lang_iso',
+			array(
+				'wrapperHtmlOptions' => array(
+					'class' => 'col-sm-5',
+				),
+	   			'widgetOptions' => array(
+	   				'data' => CHtml::listData(IsoLanguage::model()->findAll(), 'lang_iso', 'language'
+                                ),
+					'htmlOptions' => array('multiple' => true),
+				)));
+                            
+                
+                            ?>
 
 
                         </div> 
 
 
 
-                        <div class="row">
+<div class="row">
 
 
-                            <button id="add" type="button">Add Field</button>
-                            <div id="items">
-                                <div>
-                                    <table><tr><td><b>Company</b> <input type="text" name="company[]" id="inputcompany0"></td>
-                                            <td><b>Country</b> <input type="text" name="country[]" id="inputcountry0"></td>
-                                            <td><b>Field of interest</b> <input type="text" name="function[]" id="inputfunction0"></td>
-                                        </tr></table>
-                                </div>
-                            </div>                
-
-                            <script type="text/javascript">
-
-                            </script>
+            <button id="add" type="button">Add Field</button>
+	<div id="items">
+		<div>
+                    <table><tr><td><b>Company</b> <input type="text" name="company[]" id="inputcompany0"></td>
+                            <td><b>Country</b> <input type="text" name="country[]" id="inputcountry0"></td>
+                            <td><b>Field of interest</b> <input type="text" name="function[]" id="inputfunction0"></td>
+                            </tr></table>
+                     </div>
+	</div>                
+    
+<script type="text/javascript">
+        
+        </script>
                         </div> 
 
 
@@ -358,22 +369,22 @@ echo $form->dropDownListGroup(
                 <div class="accordion-inner">
                     <fieldset>
                         <div class="row">
-<?php //echo $form->labelEx($model,'contact_adress');    ?>
-<?php
-echo $form->textFieldGroup($model, 'contact_adress', array('size' => 60, 'maxlength' => 255,
-    'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
-));
-?>
-<?php echo $form->error($model, 'contact_adress'); ?>
+                            <?php //echo $form->labelEx($model,'contact_adress');   ?>
+                            <?php
+                            echo $form->textFieldGroup($model, 'contact_adress', array('size' => 60, 'maxlength' => 255,
+                                'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
+                            ));
+                            ?>
+                            <?php echo $form->error($model, 'contact_adress'); ?>
                         </div>
 
                         <div class="row">
-<?php //echo $form->labelEx($model,'contact_address_nr');    ?>
-<?php
-echo $form->textFieldGroup($model, 'contact_address_nr', array('size' => 60, 'maxlength' => 255,
-    'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
-));
-?>
+                            <?php //echo $form->labelEx($model,'contact_address_nr');   ?>
+                            <?php
+                            echo $form->textFieldGroup($model, 'contact_address_nr', array('size' => 60, 'maxlength' => 255,
+                                'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
+                            ));
+                            ?>
                             <?php echo $form->error($model, 'contact_address_nr'); ?>
                         </div>
 
@@ -384,7 +395,7 @@ echo $form->textFieldGroup($model, 'contact_address_nr', array('size' => 60, 'ma
                                 'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
                             ));
                             ?>
-                            <?php echo $form->error($model, 'contact_address_addon'); ?>
+<?php echo $form->error($model, 'contact_address_addon'); ?>
                         </div>
 
 
@@ -411,9 +422,9 @@ echo $form->textFieldGroup($model, 'contact_address_nr', array('size' => 60, 'ma
                             ));
                             ?></div>
                             <?php // echo $form->dropDownList($model, 'contact_iso_country', CHtml::listData(isocountry::model()->findAll(), 'country_iso', 'country_name')); ?>
-                            <?php // echo $form->textField($model,'departmentId');  ?>
-                            <?php // echo $form->textField($model,'contact_iso_country');  ?>
-                            <?php echo $form->error($model, 'contact_iso_country'); ?><br>
+<?php // echo $form->textField($model,'departmentId');  ?>
+<?php // echo $form->textField($model,'contact_iso_country');  ?>
+<?php echo $form->error($model, 'contact_iso_country'); ?><br>
 
 
 
@@ -425,7 +436,7 @@ echo $form->textFieldGroup($model, 'contact_address_nr', array('size' => 60, 'ma
                                 'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
                             ));
                             ?>
-                        <?php echo $form->error($model, 'contact_city'); ?>
+<?php echo $form->error($model, 'contact_city'); ?>
 
                         </div>
                     </fieldset>
@@ -443,22 +454,22 @@ echo $form->textFieldGroup($model, 'contact_address_nr', array('size' => 60, 'ma
                 <div class="accordion-inner">
                     <fieldset>
                         <div class="row">
-<?php //echo $form->labelEx($model,'contact_phone');   ?>
-<?php
-echo $form->textFieldGroup($model, 'contact_phone', array('size' => 60, 'maxlength' => 255,
-    'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
-));
-?>
-<?php echo $form->error($model, 'contact_phone'); ?>
+                            <?php //echo $form->labelEx($model,'contact_phone');  ?>
+                            <?php
+                            echo $form->textFieldGroup($model, 'contact_phone', array('size' => 60, 'maxlength' => 255,
+                                'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
+                            ));
+                            ?>
+                            <?php echo $form->error($model, 'contact_phone'); ?>
                         </div>
 
                         <div class="row">
-<?php //echo $form->labelEx($model,'contact_website');   ?>
-<?php
-echo $form->textFieldGroup($model, 'contact_website', array('size' => 60, 'maxlength' => 255,
-    'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
-));
-?>
+                            <?php //echo $form->labelEx($model,'contact_website');  ?>
+                            <?php
+                            echo $form->textFieldGroup($model, 'contact_website', array('size' => 60, 'maxlength' => 255,
+                                'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
+                            ));
+                            ?>
                             <?php echo $form->error($model, 'contact_website'); ?>
                         </div>
 
@@ -509,43 +520,43 @@ echo $form->textFieldGroup($model, 'contact_website', array('size' => 60, 'maxle
                                 'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
                             ));
                             ?>
-                            <?php echo $form->error($model, 'contact_li'); ?>
+<?php echo $form->error($model, 'contact_li'); ?>
                         </div>
 
 
 
-                            <?php
-                            echo $form->ckEditorGroup(
-                                    $model, 'contact_bio', array(
-                                'widgetOptions' => array(
-                                    'editorOptions' => array(
-                                        // 'fullpage' => 'js:true',
-                                        'class' => 'span10',
-                                        'rows' => 5,
-                                        'options' => array('plugins' => array('clips', 'fontfamily'), 'lang' => 'ang')
-                                    )
+                        <?php
+                        echo $form->ckEditorGroup(
+                                $model, 'contact_bio', array(
+                            'widgetOptions' => array(
+                                'editorOptions' => array(
+                                    // 'fullpage' => 'js:true',
+                                    'class' => 'span10',
+                                    'rows' => 5,
+                                    'options' => array('plugins' => array('clips', 'fontfamily'), 'lang' => 'ang')
                                 )
-                                    )
-                            );
-                            ?>
+                            )
+                                )
+                        );
+                        ?>
 
                         <div class="row">
-                        <?php //echo $form->labelEx($model,'contact_is_imported');  ?>
-                        <?php
-                        // echo $form->textFieldGroup($model, 'contact_is_imported', array('size' => 1, 'maxlength' => 1,
-                        //   'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
-                        // ));
-                        ?>
-                        <?php // echo $form->error($model, 'contact_is_imported');  ?>
+                            <?php //echo $form->labelEx($model,'contact_is_imported');  ?>
+                            <?php
+                            // echo $form->textFieldGroup($model, 'contact_is_imported', array('size' => 1, 'maxlength' => 1,
+                            //   'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
+                            // ));
+                            ?>
+                            <?php // echo $form->error($model, 'contact_is_imported');  ?>
                         </div>
 
                         <div class="row">
-                        <?php //echo $form->labelEx($model,'contact_imported_src');   ?>
-                        <?php
-                        //  echo //$form->textFieldGroup($model, 'contact_imported_src', array('size' => 60, 'maxlength' => 255,
-                        //  'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
-                        // ));
-                        ?>
+                            <?php //echo $form->labelEx($model,'contact_imported_src');   ?>
+                            <?php
+                            //  echo //$form->textFieldGroup($model, 'contact_imported_src', array('size' => 60, 'maxlength' => 255,
+                            //  'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
+                            // ));
+                            ?>
                             <?php ///echo $form->error($model, 'contact_imported_src');  ?>
                         </div>
 
@@ -557,19 +568,19 @@ echo $form->textFieldGroup($model, 'contact_website', array('size' => 60, 'maxle
                             //'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
                             // ));
                             ?>
-                            <?php // echo $form->error($model, 'contact_status');   ?>
+<?php // echo $form->error($model, 'contact_status');   ?>
                         </div>
                     </fieldset>
                 </div>
             </div>
             <div class="buttons pull-right">
-<?php
+                <?php
 //                $this->widget('booster.widgets.TbButton', array('buttonType' => 'submit', 'size' => 'large', 'context' => 'success', 'label' => 'Register')
 //                );
 //                
-?>
+                ?>
 
-                            <?php // echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save');      ?>
+<?php // echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save');      ?>
 
             </div>
 
@@ -583,6 +594,6 @@ echo $form->textFieldGroup($model, 'contact_website', array('size' => 60, 'maxle
 
 
 
-                <?php $this->endWidget(); ?>
+<?php $this->endWidget(); ?>
 
 </div><!-- form -->

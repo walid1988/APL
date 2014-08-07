@@ -90,6 +90,37 @@ function sendData(param, page)
 
 
 
+function sendtable(param)
+{
+    
+        if (document.all){
+            //Internet Explorer
+            var XhrObj = new ActiveXObject("Microsoft.XMLHTTP");
+        }//fin if
+        else{
+            //Mozilla
+            var XhrObj = new XMLHttpRequest();
+        }//fin else
+
+        //dÃ©finition de l'endroit d'affichage
+        var page = 'company/companydelete';
+        XhrObj.open("POST", page);
+
+        //Ok pour la page cible
+        XhrObj.onreadystatechange = function(){
+            if (XhrObj.readyState == 4 && XhrObj.status == 200)
+                var data = XhrObj.responseText;
+        }
+        XhrObj.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        XhrObj.send(param);
+    
+    return data;
+
+
+}//fin fonction SendData
+
+
+
 
 
 function read() {
