@@ -11,7 +11,9 @@ class mandrillwrap extends CApplicationComponent {
     public $html;
     public $subject;
     public $replyEmail;
-
+    public $img_content;
+    public $ext;
+    public $img_name;
     public function init() {
         Yii::import('application.vendors.Mandrill');
         define('MANDRILL_API_KEY', 'vx4a-QQzpKypkAqF2U9cfA');
@@ -45,12 +47,31 @@ class mandrillwrap extends CApplicationComponent {
 							"tags":["fal"],
 							"google_analytics_domains":["..."],
 							"google_analytics_campaign":["..."],
-							"metadata":["..."]
+							"metadata":["..."],
+                                                        "images":[
+                                                            {     
+                                                            "type": "'. $this->ext.'",
+                                                            "name": "'. $this->img_name.'",
+                                                            "content": "'. $this->img_content.'"
+                                                          },
+                                                           {     
+                                                            "type": "'. $this->ext.'",
+                                                            "name": "'. $this->img_name.'",
+                                                            "content": "'. $this->img_content.'"
+                                                          },
+                                                           {     
+                                                            "type": "'. $this->ext.'",
+                                                            "name": "'. $this->img_name.'",
+                                                            "content": "'. $this->img_content.'"
+                                                          }
+                                                                                                ]
                 
 							}
 						}';
 
-        $ret = Mandrill::call((array) json_decode($request_json));
+        $ret= Mandrill::call((array) json_decode($request_json));
+          return $ret ;
+   
     }
 
 }

@@ -117,7 +117,7 @@ class Client extends CActiveRecord
             'user_id' => 'ID',
             'user_package_id' => 'User Package',
             'user_pass' => 'Password',
-           // 'user_credits' => 'Credits',
+           'user_credits' => 'Credits',
             'user_email' => 'Email',
             'porfile_initials' => 'Initials',
             'porfile_name_first' => 'First Name',
