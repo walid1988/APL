@@ -4,6 +4,8 @@
 /* @var $form CActiveForm */
 ?>
 
+
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/main.js"></script>
 <div class="form">
 
     <?php
@@ -36,6 +38,7 @@
 
     <div class="row">
         
+    <div class="form-group">
         
         <div class="col-sm-3 control-label" >
         <?php  echo $form->labelEx($model, 'Contact List:'); ?></div>
@@ -82,7 +85,7 @@
 				'widgetOptions' => array(
 					'editorOptions' => array(
 						'fullpage' => 'js:true',
-						/* 'width' => '640', */
+                    'width' => '540',
 						/* 'resize_maxWidth' => '640', */
 						/* 'resize_minWidth' => '320'*/
 					)
@@ -108,9 +111,9 @@
     </div>
 
     <div class="row">
-        <?php // echo $form->labelEx($model, 'replyto_name'); ?>
-        <?php echo $form->textFieldGroup($model, 'press_replyto_name', array('size' => 60, 'maxlength' => 255,     
-            'wrapperHtmlOptions' => array('class' => 'col-sm-6',),                    
+        <?php // echo $form->labelEx($model, 'replyto_name');  ?>
+        <?php
+        echo $form->textFieldGroup($model, 'press_replyto_name', array('size' => 60, 'maxlength' => 255, 'wrapperHtmlOptions' => array('class' => 'col-sm-6',),
             ));   
         ?>
         <?php echo $form->error($model, 'press_replyto_name'); ?>
@@ -178,7 +181,7 @@
    	
             <div class="row">
     <?php //echo $form->labelEx($model, 'press_file_1'); ?>
-    <?php echo $form->fileFieldGroup($model, 'press_file_1');?>
+        <?php echo $form->fileFieldGroup($model, 'press_file_1', array('wrapperHtmlOptions' => array('class' => 'col-sm-4'))); ?>
     <?php echo $form->error($model, 'press_file_1'); ?>     
             </div>
     
